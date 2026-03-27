@@ -7,10 +7,8 @@
 ---
 
 ## 📸 スクリーンショット
-<img width="1556" height="912" alt="image" src="https://github.com/user-attachments/assets/a754c53e-cbf8-4408-8a2e-d62364c48022" />
 
-
-![東京賃貸物件マップ スクリーンショット](docs/screenshot.png)
+<img width="1400" alt="東京賃貸物件マップ" src="https://github.com/user-attachments/assets/a754c53e-cbf8-4408-8a2e-d62364c48022" />
 
 地図上に800件超の物件マーカーを表示。色で価格帯を直感的に把握できます。
 
