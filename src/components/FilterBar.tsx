@@ -62,22 +62,27 @@ export default function FilterBar({
 
   return (
     <div className="flex flex-col bg-white border-b border-gray-200 shadow-sm shrink-0">
-      {/* 1行目: ロゴ・価格帯フィルター・件数・検索 */}
-      <div className="flex items-center gap-3 px-4 py-2 h-12">
-        <div className="flex items-center gap-1.5 mr-2 shrink-0">
+
+      {/* ── 1行目: ロゴ・価格帯・件数 ────────────────── */}
+      <div className="flex flex-wrap items-center gap-x-2 gap-y-1.5 px-3 py-2">
+
+        {/* ロゴ */}
+        <div className="flex items-center gap-1.5 shrink-0">
           <div className="w-6 h-6 rounded-md bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center">
             <span className="text-white text-xs font-bold leading-none">東</span>
           </div>
-          <span className="text-sm font-bold text-gray-800 tracking-tight">東京賃貸マップ</span>
-          <span className="h-4 w-px bg-gray-300 mx-1" />
+          {/* タイトルはsmサイズ以上で表示 */}
+          <span className="text-sm font-bold text-gray-800 tracking-tight hidden sm:inline">東京賃貸マップ</span>
+          <span className="h-4 w-px bg-gray-300 mx-0.5 hidden sm:inline" />
         </div>
 
-        <span className="text-xs font-semibold text-gray-500 uppercase tracking-wide whitespace-nowrap">価格帯：</span>
+        {/* 価格帯フィルター */}
+        <span className="text-xs font-semibold text-gray-500 uppercase tracking-wide whitespace-nowrap hidden sm:inline">価格帯：</span>
         {CATEGORIES.map(({ key, label, color, activeColor }) => (
           <button
             key={key}
             onClick={() => toggle(key)}
-            className={`px-3 py-1 rounded-full border-2 text-xs font-semibold transition-all whitespace-nowrap ${
+            className={`px-2.5 py-1 rounded-full border-2 text-xs font-semibold transition-all whitespace-nowrap ${
               activeCategories.has(key) ? `${activeColor} shadow-sm` : `bg-white ${color} hover:shadow-sm`
             }`}
           >
@@ -85,19 +90,19 @@ export default function FilterBar({
           </button>
         ))}
 
+        {/* 件数 */}
         {isLoading ? (
-          <span className="text-xs text-blue-500 animate-pulse ml-1">データ読み込み中…</span>
+          <span className="text-xs text-blue-500 animate-pulse">読み込み中…</span>
         ) : propertyCount !== undefined ? (
-          <span className="text-xs text-gray-400 ml-1 tabular-nums">{propertyCount.toLocaleString()}件表示</span>
+          <span className="text-xs text-gray-400 tabular-nums">{propertyCount.toLocaleString()}件</span>
         ) : null}
 
-        <div className="flex-1" />
-
-        <div className="flex items-center gap-2">
+        {/* 現在地ボタン・検索 (右寄せ、モバイルでは次の行に折り返し) */}
+        <div className="flex items-center gap-2 ml-auto">
           <button
             onClick={onGeolocate}
             title="現在地を表示"
-            className="px-2.5 py-1 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-sm"
+            className="px-2 py-1 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-sm shrink-0"
             aria-label="現在地"
           >
             📍
@@ -108,27 +113,27 @@ export default function FilterBar({
             onChange={(e) => setQuery(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
             placeholder="地名・住所で検索…"
-            className="text-sm border border-gray-200 bg-gray-50 rounded-full px-4 py-1 w-48 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:bg-white focus:border-blue-300 transition-colors placeholder:text-gray-400"
+            className="text-sm border border-gray-200 bg-gray-50 rounded-full px-3 py-1 w-36 sm:w-48 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:bg-white focus:border-blue-300 transition-colors placeholder:text-gray-400"
             disabled={isSearching}
           />
           <button
             onClick={handleSearch}
             disabled={isSearching || !query.trim()}
-            className="text-sm px-4 py-1 rounded-full bg-blue-600 text-white font-semibold hover:bg-blue-700 active:scale-95 disabled:opacity-40 transition-all whitespace-nowrap shadow-sm"
+            className="text-sm px-3 py-1 rounded-full bg-blue-600 text-white font-semibold hover:bg-blue-700 active:scale-95 disabled:opacity-40 transition-all whitespace-nowrap shadow-sm"
           >
-            {isSearching ? '検索中…' : '移動'}
+            {isSearching ? '…' : '移動'}
           </button>
         </div>
       </div>
 
-      {/* 2行目: 高度フィルター（間取り・徒歩分） */}
-      <div className="flex items-center gap-3 px-4 py-1.5 border-t border-gray-100 bg-gray-50/60">
-        <span className="text-xs font-semibold text-gray-500 uppercase tracking-wide whitespace-nowrap">間取り：</span>
+      {/* ── 2行目: 間取り・徒歩フィルター（横スクロール対応） ── */}
+      <div className="flex items-center gap-2 px-3 py-1.5 border-t border-gray-100 bg-gray-50/60 overflow-x-auto scrollbar-none">
+        <span className="text-xs font-semibold text-gray-500 uppercase tracking-wide whitespace-nowrap shrink-0">間取り：</span>
         {ROOMS_OPTIONS.map((r) => (
           <button
             key={r}
             onClick={() => onRoomsFilterChange(r)}
-            className={`px-2.5 py-0.5 text-xs rounded-full border transition-all whitespace-nowrap ${
+            className={`px-2.5 py-0.5 text-xs rounded-full border transition-all whitespace-nowrap shrink-0 ${
               roomsFilter.has(r)
                 ? 'bg-blue-500 text-white border-blue-500 shadow-sm'
                 : 'bg-white text-gray-600 border-gray-300 hover:border-blue-400'
@@ -138,16 +143,16 @@ export default function FilterBar({
           </button>
         ))}
 
-        <span className="h-4 w-px bg-gray-300 mx-1" />
+        <span className="h-4 w-px bg-gray-300 mx-0.5 shrink-0" />
 
-        <span className="text-xs font-semibold text-gray-500 uppercase tracking-wide whitespace-nowrap">徒歩：</span>
+        <span className="text-xs font-semibold text-gray-500 uppercase tracking-wide whitespace-nowrap shrink-0">徒歩：</span>
         <select
           value={maxWalk ?? ''}
           onChange={(e) => {
             const v = e.target.value;
             onMaxWalkChange(v === '' ? null : (Number(v) as MaxWalkValue));
           }}
-          className="text-xs border border-gray-300 rounded-md px-2 py-0.5 bg-white text-gray-700 focus:outline-none focus:border-blue-400 cursor-pointer"
+          className="text-xs border border-gray-300 rounded-md px-2 py-0.5 bg-white text-gray-700 focus:outline-none focus:border-blue-400 cursor-pointer shrink-0"
         >
           {WALK_OPTIONS.map((opt) => (
             <option key={String(opt.value)} value={opt.value ?? ''}>

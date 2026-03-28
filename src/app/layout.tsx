@@ -18,6 +18,12 @@ export const metadata: Metadata = {
   description: "東京の賃貸物件を地図上で可視化するアプリ",
 };
 
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{
