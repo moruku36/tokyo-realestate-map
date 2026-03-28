@@ -75,7 +75,7 @@ export default function MapComponent({ properties, selectedProperty, onPropertyC
       data: properties,
       getPosition: (d) => [d.longitude, d.latitude],
       getFillColor: (d) => getPriceColor(d.priceCategory),
-      getRadius: 8,
+      getRadius: 12,
       radiusUnits: 'pixels',
       pickable: true,
       stroked: true,
@@ -98,7 +98,7 @@ export default function MapComponent({ properties, selectedProperty, onPropertyC
   ];
 
   return (
-    <div className="relative w-full h-full">
+    <div className="relative w-full h-full bg-slate-100">
       <DeckGL
         viewState={viewState}
         onViewStateChange={({ viewState: vs }) => setViewState(vs as MapViewState)}
@@ -113,8 +113,8 @@ export default function MapComponent({ properties, selectedProperty, onPropertyC
         />
       </DeckGL>
 
-      {/* 地図凡例 */}
-      <div className="absolute bottom-6 left-4 z-10 bg-white/90 rounded-lg shadow-md px-3 py-2 pointer-events-none">
+      {/* 地図凡例: モバイルでボトムシートに隠れないよう上部に配置 */}
+      <div className="absolute top-3 left-3 md:bottom-6 md:top-auto md:left-4 z-10 bg-white/90 backdrop-blur-sm rounded-lg shadow-md px-3 py-2 pointer-events-none">
         <p className="font-semibold text-gray-700 text-xs mb-1.5">賃料</p>
         {[
           { color: 'bg-green-500',  label: '〜¥10万' },

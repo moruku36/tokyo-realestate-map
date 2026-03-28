@@ -128,7 +128,7 @@ export default function Home() {
   }, [showToast]);
 
   return (
-    <div className="flex flex-col h-screen">
+    <div className="flex flex-col h-screen bg-white">
       <FilterBar
         activeCategories={activeCategories}
         onChange={setActiveCategories}

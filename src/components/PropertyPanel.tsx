@@ -49,7 +49,7 @@ export default function PropertyPanel({ property, onClose }: PropertyPanelProps)
           - デスクトップ: 右サイドバー (relative, w-80)
       */}
       <div className="
-        fixed inset-x-0 bottom-0 z-30 max-h-[72vh] rounded-t-2xl
+        fixed inset-x-0 bottom-0 z-30 max-h-[75vh] rounded-t-2xl
         md:relative md:inset-auto md:bottom-auto md:max-h-none md:h-full md:w-80 md:shrink-0 md:rounded-none
         bg-white border-t border-gray-200 md:border-t-0 md:border-l
         overflow-y-auto flex flex-col shadow-2xl md:shadow-none
@@ -86,7 +86,7 @@ export default function PropertyPanel({ property, onClose }: PropertyPanelProps)
         </div>
 
         {/* ── 詳細ゾーン ── */}
-        <div className="px-5 py-4 flex-1">
+        <div className="px-5 py-4 flex-1 pb-[max(1rem,env(safe-area-inset-bottom))]">
           <div className="space-y-0 text-sm">
             {property.rooms && property.rooms !== '不明' && (
               <div className="flex justify-between border-b border-gray-100 py-2.5">
