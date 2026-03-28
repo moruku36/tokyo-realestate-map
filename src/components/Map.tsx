@@ -115,13 +115,16 @@ export default function MapComponent({ properties, selectedProperty, onPropertyC
 
       {hoveredProperty && (
         <div
-          className="absolute z-20 bg-white/95 border border-gray-200 rounded-md shadow-md px-3 py-2 pointer-events-none text-sm"
+          className="absolute z-20 bg-white rounded-xl shadow-xl border border-gray-100 px-4 py-3 pointer-events-none text-sm min-w-[160px]"
           style={{ left: pointerPos.x + 12, top: pointerPos.y - 10 }}
         >
-          <div className="font-semibold">{hoveredProperty.name}</div>
-          <div className="text-gray-600">推定¥{hoveredProperty.monthlyRent.toLocaleString()}/月</div>
+          <div className="font-semibold text-gray-900 text-sm leading-tight mb-1">{hoveredProperty.name}</div>
+          <div className="text-blue-600 font-semibold text-sm tabular-nums">推定¥{hoveredProperty.monthlyRent.toLocaleString()}/月</div>
           {hoveredProperty.nearestStation && (
-            <div className="text-gray-500 text-xs">{hoveredProperty.nearestStation}駅</div>
+            <div className="text-gray-400 text-xs mt-0.5 flex items-center gap-1">
+              <span>📍</span>
+              <span>{hoveredProperty.nearestStation}駅</span>
+            </div>
           )}
         </div>
       )}

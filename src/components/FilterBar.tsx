@@ -43,13 +43,21 @@ export default function FilterBar({
 
   return (
     <div className="flex items-center gap-3 px-4 py-2 bg-white border-b border-gray-200 shadow-sm h-14 shrink-0">
-      <span className="text-sm font-semibold text-gray-700 whitespace-nowrap">価格帯：</span>
+      <div className="flex items-center gap-1.5 mr-2 shrink-0">
+        <div className="w-6 h-6 rounded-md bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center">
+          <span className="text-white text-xs font-bold leading-none">東</span>
+        </div>
+        <span className="text-sm font-bold text-gray-800 tracking-tight">東京賃貸マップ</span>
+        <span className="h-4 w-px bg-gray-300 mx-1" />
+      </div>
+
+      <span className="text-xs font-semibold text-gray-500 uppercase tracking-wide whitespace-nowrap">価格帯：</span>
       {CATEGORIES.map(({ key, label, color, activeColor }) => (
         <button
           key={key}
           onClick={() => toggle(key)}
-          className={`px-3 py-1.5 rounded-full border-2 text-sm font-medium transition-colors whitespace-nowrap ${
-            activeCategories.has(key) ? activeColor : `bg-white ${color}`
+          className={`px-3 py-1.5 rounded-full border-2 text-xs font-semibold transition-all whitespace-nowrap ${
+            activeCategories.has(key) ? `${activeColor} shadow-sm` : `bg-white ${color} hover:shadow-sm`
           }`}
         >
           {label}
@@ -59,7 +67,7 @@ export default function FilterBar({
       {isLoading ? (
         <span className="text-xs text-blue-500 animate-pulse ml-1">データ読み込み中…</span>
       ) : propertyCount !== undefined ? (
-        <span className="text-xs text-gray-400 ml-1">{propertyCount.toLocaleString()}件表示</span>
+        <span className="text-xs text-gray-400 ml-1 tabular-nums">{propertyCount.toLocaleString()}件表示</span>
       ) : null}
 
       <div className="flex-1" />
@@ -71,13 +79,13 @@ export default function FilterBar({
           onChange={(e) => setQuery(e.target.value)}
           onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
           placeholder="地名・住所で検索…"
-          className="text-sm border border-gray-300 rounded-full px-3 py-1.5 w-52 focus:outline-none focus:ring-2 focus:ring-blue-400"
+          className="text-sm border border-gray-200 bg-gray-50 rounded-full px-4 py-1.5 w-52 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:bg-white focus:border-blue-300 transition-colors placeholder:text-gray-400"
           disabled={isSearching}
         />
         <button
           onClick={handleSearch}
           disabled={isSearching || !query.trim()}
-          className="text-sm px-4 py-1.5 rounded-full bg-blue-500 text-white font-medium hover:bg-blue-600 disabled:opacity-50 transition-colors whitespace-nowrap"
+          className="text-sm px-4 py-1.5 rounded-full bg-blue-600 text-white font-semibold hover:bg-blue-700 active:scale-95 disabled:opacity-40 transition-all whitespace-nowrap shadow-sm"
         >
           {isSearching ? '検索中…' : '移動'}
         </button>
