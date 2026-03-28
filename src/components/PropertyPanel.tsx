@@ -88,10 +88,16 @@ export default function PropertyPanel({ property, onClose }: PropertyPanelProps)
               </span>
             </div>
           )}
+          {property.size > 0 && (
+            <div className="flex justify-between border-b border-gray-100 py-2.5">
+              <span className="text-gray-400 text-xs uppercase tracking-wide">価格/m²</span>
+              <span className="font-semibold text-gray-800">¥{Math.round(property.monthlyRent / property.size).toLocaleString()}/m²</span>
+            </div>
+          )}
           {property.buildingYear && (
             <div className="flex justify-between py-2.5">
-              <span className="text-gray-400 text-xs uppercase tracking-wide">建築年</span>
-              <span className="font-semibold text-gray-800">{property.buildingYear}年</span>
+              <span className="text-gray-400 text-xs uppercase tracking-wide">築年数</span>
+              <span className="font-semibold text-gray-800">{2026 - property.buildingYear}年（{property.buildingYear}年築）</span>
             </div>
           )}
         </div>

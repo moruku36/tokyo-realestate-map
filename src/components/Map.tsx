@@ -113,6 +113,21 @@ export default function MapComponent({ properties, selectedProperty, onPropertyC
         />
       </DeckGL>
 
+      {/* 地図凡例 */}
+      <div className="absolute bottom-6 left-4 z-10 bg-white/90 rounded-lg shadow-md px-3 py-2 pointer-events-none">
+        <p className="font-semibold text-gray-700 text-xs mb-1.5">賃料</p>
+        {[
+          { color: 'bg-green-500',  label: '〜¥10万' },
+          { color: 'bg-yellow-400', label: '¥10〜20万' },
+          { color: 'bg-red-500',    label: '¥20万〜' },
+        ].map(({ color, label }) => (
+          <div key={label} className="flex items-center gap-2 mb-1 last:mb-0">
+            <span className={`inline-block w-3 h-3 rounded-full ${color}`} />
+            <span className="text-gray-600 text-xs">{label}</span>
+          </div>
+        ))}
+      </div>
+
       {hoveredProperty && (
         <div
           className="absolute z-20 bg-white rounded-xl shadow-xl border border-gray-100 px-4 py-3 pointer-events-none text-sm min-w-[160px]"

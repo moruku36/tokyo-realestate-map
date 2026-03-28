@@ -1,3 +1,6 @@
+export type RoomsFilterValue = '1R' | '1K' | '1LDK' | '2LDK' | '3LDK+';
+export type MaxWalkValue = 5 | 10 | 15 | null;
+
 export interface Property {
   id: string;
   name: string;
