@@ -203,7 +203,7 @@ export function generateProperties(): Property[] {
     if (!rentRange) continue;
 
     const stationList = STATIONS[code] ?? ['最寄駅'];
-    const count = 4 + Math.floor(rand(parseInt(code, 10)) * 4); // 4〜7件
+    const count = 10 + Math.floor(rand(parseInt(code, 10)) * 8); // 10〜17件
 
     for (let i = 0; i < count; i++) {
       const seed = globalIdx * 17 + i;
@@ -220,9 +220,9 @@ export function generateProperties(): Property[] {
       const timeToStation = 2 + Math.floor(rand(seed + 4) * 18); // 2〜19分
       const buildingYear = 1985 + Math.floor(rand(seed + 5) * 40); // 1985〜2024年
 
-      // 市区町村内で物件を散らす
-      const latOffset = (rand(seed + 6) - 0.5) * 0.04;
-      const lonOffset = (rand(seed + 7) - 0.5) * 0.04;
+      // 市区町村内で物件を散らす（範囲を広げて重なりを低減）
+      const latOffset = (rand(seed + 6) - 0.5) * 0.06;
+      const lonOffset = (rand(seed + 7) - 0.5) * 0.06;
 
       properties.push({
         id: `gen-${code}-${i}`,

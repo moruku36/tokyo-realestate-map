@@ -5,6 +5,9 @@ import type { Property } from '@/types/property';
 
 const PREFECTURES = ['13', '14', '11', '12'];
 
+// 取得対象の取引種別
+const TARGET_TYPES = new Set(['中古マンション等', '新築マンション等']);
+
 interface MlitRecord {
   Type: string;
   MunicipalityCode: string;
@@ -37,7 +40,10 @@ function deriveCategory(rent: number): Property['priceCategory'] {
 }
 
 async function fetchPrefecture(prefCode: string): Promise<MlitRecord[]> {
+  // 2021〜2024年の4年分を取得
   const periods = [
+    { from: '20211', to: '20214' },
+    { from: '20221', to: '20224' },
     { from: '20231', to: '20234' },
     { from: '20241', to: '20244' },
   ];
@@ -55,14 +61,14 @@ async function fetchPrefecture(prefCode: string): Promise<MlitRecord[]> {
         allRecords.push(...json.data);
       }
     } catch {
-      // ネットワーク不可 → フォールバックデータを使用
+      // ネットワーク不可 → 後続で生成データで補完
     }
   }
   return allRecords;
 }
 
 export async function GET() {
-  // 外部APIを試みる
+  // 外部APIを並列取得
   const results = await Promise.allSettled(PREFECTURES.map(fetchPrefecture));
   const apiRecords = results.flatMap(r => r.status === 'fulfilled' ? r.value : []);
 
@@ -70,7 +76,7 @@ export async function GET() {
   let counter = 0;
 
   apiRecords.forEach((r, idx) => {
-    if (r.Type !== '中古マンション等') return;
+    if (!TARGET_TYPES.has(r.Type)) return;
     if (!r.TradePrice || r.TradePrice.includes('〜')) return;
     const price = parseInt(r.TradePrice.replace(/[^\d]/g, ''), 10);
     if (isNaN(price) || price < 1_000_000 || price > 500_000_000) return;
@@ -79,7 +85,7 @@ export async function GET() {
     if (monthlyRent < 20_000) return;
 
     const baseCoords = getMunicipalityCoords(r.MunicipalityCode);
-    const seed = (idx) * 2.3999;
+    const seed = idx * 2.3999;
     const latOffset = Math.sin(seed) * 0.025;
     const lonOffset = Math.cos(seed) * 0.025;
 
@@ -101,11 +107,13 @@ export async function GET() {
     });
   });
 
-  // APIデータが少ない場合は生成データで補完
-  const minRequired = 100;
-  const properties = apiProperties.length >= minRequired
-    ? apiProperties
-    : generateProperties();
+  // APIデータと生成データを常に統合して物件数を最大化
+  const generated = generateProperties();
 
-  return NextResponse.json(properties);
+  // APIデータが十分ある場合は生成データと統合、少ない場合は生成データのみ
+  const combined = apiProperties.length >= 100
+    ? [...apiProperties, ...generated]
+    : generated;
+
+  return NextResponse.json(combined);
 }
